@@ -14,6 +14,7 @@ namespace Lineage2Valheim
         private static readonly Color Card = ColorOf(0x222829);
         private static readonly MethodInfo RunSpeedFactor = typeof(Player).GetMethod(
             "GetRunSpeedFactor", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        private static readonly Skills.SkillType[] NativeSkillTypes = GetNativeSkillTypes();
         private readonly Dictionary<string, Texture2D> _icons = new Dictionary<string, Texture2D>();
         private GUIStyle _name, _section, _label, _value, _small;
         private Vector2 _scroll;
@@ -27,7 +28,11 @@ namespace Lineage2Valheim
             Fill(area, Panel, pixel);
             Stroke(area, Gold, pixel);
 
-            const float designHeight = 532f;
+            var skills = player.GetSkills();
+            int nativeSkillCount = skills == null ? 0 : NativeSkillTypes.Length;
+            const float nativeSkillsTop = 542f;
+            const float nativeSkillRowHeight = 24f;
+            float designHeight = Mathf.Max(532f, nativeSkillsTop + 38f + nativeSkillCount * nativeSkillRowHeight + 12f);
             float designWidth = Mathf.Max(748f, area.width - 32f);
             var viewport = new Rect(area.x + 10f, area.y + 10f, area.width - 20f, area.height - 20f);
             _scroll = GUI.BeginScrollView(viewport, _scroll,
@@ -41,7 +46,7 @@ namespace Lineage2Valheim
             Stroke(identity, Gold, pixel);
             GUI.Label(new Rect(22f, 8f, innerWidth - 40f, 30f), player.GetPlayerName(), _name);
             GUI.Label(new Rect(23f, 35f, innerWidth - 42f, 20f),
-                "Class: Unassigned", _small);
+                GetClassSummary(player), _small);
 
             float vitalsY = 73f;
             float vitalGap = 12f;
@@ -96,7 +101,44 @@ namespace Lineage2Valheim
             GUI.Label(new Rect(14f, 499f, innerWidth - 28f, 27f),
                 _hoverText ?? "Hover a stat for its source and limits. Attack speed, criticals and evasion await combat integration.",
                 _small);
+
+            GUI.Label(new Rect(6f, nativeSkillsTop, innerWidth, 30f), "NATIVE VALHEIM SKILLS", _section);
+            Fill(new Rect(6f, nativeSkillsTop + 31f, innerWidth, 1f), Gold, pixel);
+            for (int i = 0; i < nativeSkillCount; i++)
+            {
+                float rowY = nativeSkillsTop + 37f + i * nativeSkillRowHeight;
+                if ((i & 1) == 0)
+                    Fill(new Rect(6f, rowY, innerWidth, nativeSkillRowHeight), ColorOf(0x1B2223), pixel);
+                Skills.SkillType type = NativeSkillTypes[i];
+                GUI.Label(new Rect(14f, rowY, innerWidth - 100f, nativeSkillRowHeight), type.ToString(), _small);
+                GUI.Label(new Rect(innerWidth - 78f, rowY, 70f, nativeSkillRowHeight), skills.GetSkillLevel(type).ToString("0.#"), _label);
+            }
             GUI.EndScrollView();
+        }
+
+        private static string GetClassSummary(Player player)
+        {
+            string className = CharacterClassSystem.GetClass(player);
+            if (string.IsNullOrEmpty(className)) return "Class: Unassigned";
+            string specialization = CharacterClassSystem.GetProfessionName(player);
+            if (specialization == "Fighter") return $"Class: {className}";
+            if (specialization == "Rogue")
+            {
+                string path = CharacterClassSystem.GetRoguePathName(player);
+                if (!string.IsNullOrEmpty(path)) specialization += $" / {path}";
+            }
+            return $"Class: {className} · {specialization}";
+        }
+
+        private static Skills.SkillType[] GetNativeSkillTypes()
+        {
+            var values = new List<Skills.SkillType>();
+            foreach (Skills.SkillType type in System.Enum.GetValues(typeof(Skills.SkillType)))
+            {
+                if (type == Skills.SkillType.All) continue;
+                values.Add(type);
+            }
+            return values.ToArray();
         }
 
         private void DrawVital(Rect rect, string title, float current, float maximum, Color fill, Texture2D pixel)

@@ -47,6 +47,7 @@ namespace Lineage2Valheim
         internal static bool HasClass(Player player) => GetClass(player) == Fighter;
         internal static bool HasProfession(Player player) => !string.IsNullOrEmpty(GetProfession(player));
         internal static string GetProfessionName(Player player) => GetProfession(player) ?? "Fighter";
+        internal static string GetRoguePathName(Player player) => GetRoguePath(player);
 
         internal static string GetClass(Player player)
         {

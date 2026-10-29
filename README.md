@@ -36,7 +36,7 @@ The cached Canvas is released when a world unloads, and a new one is built for t
 
 ## Character Status
 
-Press **F10** or use the bottom-right character button to open the status sheet. It follows the Skills window styling without a character portrait. Health, stamina, eitr, equipped weapon physical damage, current body armor, and a run-speed rating update from the local player. The run-speed rating uses 100 as the unmodified baseline; active status effects may alter movement further. Hover each stat for its definition.
+Press **F10** or use the bottom-right character button to open the status sheet. It follows the Skills window styling without a character portrait. The identity header shows the selected class and, when chosen, its specialization and Rogue path. Health, stamina, eitr, equipped weapon physical damage, current body armor, and a run-speed rating update from the local player. The run-speed rating uses 100 as the unmodified baseline; active status effects may alter movement further. A scrollable list shows each native Valheim skill and its current numeric level. Hover each combat stat for its definition.
 
 Attack speed shows a dash until weapon animation timing is measured reliably. Critical chance and passive evasion show 0% because this mod has not added those combat mechanics yet. Their entries distinguish random critical hits from Valheim's combo finishers and passive evasion from dodge rolls. These displayed numbers do not currently modify combat.
 

@@ -1,0 +1,11 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+
+# Unity-generated and machine-specific files
+UnityVfxAuthoring/Library/
+UnityVfxAuthoring/Logs/
+UnityVfxAuthoring/Temp/
+UnityVfxAuthoring/UserSettings/

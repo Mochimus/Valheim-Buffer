@@ -1,0 +1,107 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>Lineage2Valheim</AssemblyName>
+    <RootNamespace>Lineage2Valheim</RootNamespace>
+    <Version>0.23.0</Version>
+    <GameDir Condition="'$(GameDir)' == ''">D:\Steam\steamapps\common\Valheim</GameDir>
+    <ModProfileDir Condition="'$(ModProfileDir)' == ''">$(APPDATA)\r2modmanPlus-local\Valheim\profiles\My-Mod</ModProfileDir>
+    <ValheimManagedDir>$(GameDir)\valheim_Data\Managed</ValheimManagedDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="assembly_valheim">
+      <HintPath>$(ValheimManagedDir)\assembly_valheim.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="assembly_utils">
+      <HintPath>$(ValheimManagedDir)\assembly_utils.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(ValheimManagedDir)\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>$(ModProfileDir)\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(ModProfileDir)\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnityVfxAuthoring\**\*.cs" />
+    <EmbeddedResource Include="Assets\*.png">
+      <LogicalName>Lineage2Valheim.Assets.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui-preview\assets\*-slot-v1.png">
+      <LogicalName>Lineage2Valheim.SlotAssets.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui-preview\assets\*-icon-v1.png">
+      <LogicalName>Lineage2Valheim.SlotAssets.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui-preview\assets\character-preview.png">
+      <LogicalName>Lineage2Valheim.SlotAssets.character-preview.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui-preview\assets\character-preview-unarmored.png">
+      <LogicalName>Lineage2Valheim.SlotAssets.character-preview-unarmored.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui-preview\assets\hotbar\*.png">
+      <LogicalName>Lineage2Valheim.HotbarAssets.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Target Name="DeployToR2ModmanProfile" AfterTargets="Build">
+    <MakeDir Directories="$(ModProfileDir)\BepInEx\plugins\Lineage2Valheim" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModProfileDir)\BepInEx\plugins\Lineage2Valheim" />
+  </Target>
+</Project>
